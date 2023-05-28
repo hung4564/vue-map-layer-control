@@ -35,7 +35,7 @@
                 :selected.sync="itemsLayerSelectId"
                 :disabled="disabled"
                 :disabledDrag="disabledDrag"
-                @click-drag:done="updateLayer()"
+                @click-drag:done="updateLayers()"
                 @click-group:remove="$emit('click:remove-group', $event)"
                 @click-group:toggle-show="onToggleShowGroup"
               >
@@ -145,7 +145,14 @@ export default {
     toggleShow() {
       this.show = !this.show;
     },
-    updateLayer() {},
+    updateLayers() {
+      let beforeId;
+      this.layers.forEach((layer) => {
+        let temp = getLayerData(layer);
+        temp.moveLayer(this.map, beforeId);
+        beforeId = temp.getBeforeId();
+      });
+    },
     addLayer(info) {
       this.layers.unshift(createLayer(this.map, info));
       if (this.$refs.layerGroup) this.$refs.layerGroup.update();
