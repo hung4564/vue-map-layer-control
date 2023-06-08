@@ -1,7 +1,7 @@
 const path = require("path");
 function getProdExternals() {
   return {
-    "@hungpv4564/vue-library-map": "@hungpv4564/vue-library-map",
+    "@hungpv97/vue-library-map": "@hungpv97/vue-library-map",
     vue: "vue",
     lodash: "lodash",
     vuedraggable: "vuedraggable"

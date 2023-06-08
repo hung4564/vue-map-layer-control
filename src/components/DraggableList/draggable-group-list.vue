@@ -13,94 +13,107 @@
     @end="onEnd($event)"
   >
     <template v-for="(layerGroup, index) in treeLayer">
-      <DraggableListItem
-        :disabledDrag="disabledDrag"
+      <div
         v-if="layerGroup.isGroup"
         :key="layerGroup.id + '_' + index"
-        class="draggable-group__item"
+        class="draggable__item"
       >
-        <div class="draggable-group__info">
-          <span class="draggable-group__title" :title="layerGroup.name">
-            {{ layerGroup.name }}
-          </span>
-          <div class="draggable-group__action">
-            <template
-              v-if="layerGroup.children && layerGroup.children.length > 0"
-            >
-              <span @click="toggleShow(layerGroup, index)">
-                <SvgIcon
-                  :size="18"
-                  type="mdi"
-                  :path="path.group.show"
-                  v-if="!layerGroup.show"
-                />
-                <SvgIcon :size="18" type="mdi" :path="path.group.hide" v-else />
-              </span>
-              <span @click="unGroup(layerGroup, index)">
-                <SvgIcon :size="18" type="mdi" :path="path.group.unGroup" />
-              </span>
-            </template>
+        <DraggableListItem
+          :disabledDrag="disabledDrag"
+          class="draggable-group__item"
+        >
+          <div class="draggable-group__info">
+            <span class="draggable-group__title" :title="layerGroup.name">
+              {{ layerGroup.name }}
+            </span>
+            <div class="draggable-group__action">
+              <template
+                v-if="layerGroup.children && layerGroup.children.length > 0"
+              >
+                <span @click="toggleShow(layerGroup, index)">
+                  <SvgIcon
+                    size="14"
+                    type="mdi"
+                    :path="path.group.show"
+                    v-if="layerGroup.show"
+                  />
+                  <SvgIcon
+                    size="14"
+                    type="mdi"
+                    :path="path.group.hide"
+                    v-else
+                  />
+                </span>
+                <span @click="unGroup(layerGroup, index)">
+                  <SvgIcon size="14" type="mdi" :path="path.group.unGroup" />
+                </span>
+              </template>
 
-            <span @click="deleteGroup(layerGroup, index)">
-              <SvgIcon :size="18" type="mdi" :path="path.group.delete" />
-            </span>
-            <span @click="toggleShowChildrenGroup(layerGroup.id)">
-              <SvgIcon
-                :size="18"
-                type="mdi"
-                :path="path.group.close"
-                v-if="isGroupShow[layerGroup.id]"
-              />
-              <SvgIcon :size="18" type="mdi" :path="path.group.open" v-else />
-            </span>
+              <span @click="deleteGroup(layerGroup, index)">
+                <SvgIcon size="14" type="mdi" :path="path.group.delete" />
+              </span>
+              <span @click="toggleShowChildrenGroup(layerGroup.id)">
+                <SvgIcon
+                  size="14"
+                  type="mdi"
+                  :path="path.group.close"
+                  v-if="isGroupShow[layerGroup.id]"
+                />
+                <SvgIcon size="14" type="mdi" :path="path.group.open" v-else />
+              </span>
+            </div>
           </div>
-        </div>
-        <div
-          v-if="isGroupShow[layerGroup.id]"
-          class="draggable-group__divider"
-        ></div>
-        <div class="draggable-group__children-container">
           <div
-            v-if="!layerGroup.children || layerGroup.children.length < 1"
-            class="draggable-group__nodata"
-          >
-            Drag layer inside this group
-          </div>
-          <draggable
-            v-show="isGroupShow[layerGroup.id]"
-            v-model="layerGroup.children"
-            ghostClass="ghost"
-            :group="{
-              name: 'layers',
-              pull: true,
-              put: checkItemCanPutInChildren
+            v-if="isGroupShow[layerGroup.id]"
+            class="draggable-group__divider"
+          ></div>
+          <div
+            :class="{
+              'draggable-group__children-container': isGroupShow[layerGroup.id]
             }"
-            handle=".draggable-handle"
-            @end="onEnd($event)"
-            class="draggable-group__children"
           >
             <div
-              v-for="(element, element_index) in layerGroup.children"
-              :key="element.id + '_' + index + '_' + element_index"
-              class="draggable__item"
+              v-if="!layerGroup.children || layerGroup.children.length < 1"
+              class="draggable-group__nodata"
             >
-              <DraggableListItem
-                :disabledDrag="disabledDrag"
-                :isSelected="currentSelectId.includes(element.id)"
-                :item="element"
+              Drag layer inside this group
+            </div>
+            <draggable
+              v-show="isGroupShow[layerGroup.id]"
+              v-model="layerGroup.children"
+              ghostClass="ghost"
+              :group="{
+                name: 'layers',
+                pull: true,
+                put: checkItemCanPutInChildren
+              }"
+              handle=".draggable-handle"
+              @end="onEnd($event)"
+              class="draggable-group__children"
+            >
+              <div
+                v-for="(element, element_index) in layerGroup.children"
+                :key="element.id + '_' + index + '_' + element_index"
+                class="draggable__item"
               >
-                <slot
-                  :group="layerGroup"
+                <DraggableListItem
+                  :disabledDrag="disabledDrag"
                   :isSelected="currentSelectId.includes(element.id)"
                   :item="element"
-                  name="item"
-                  :toggleSelect="toggleSelect"
-                ></slot>
-              </DraggableListItem>
-            </div>
-          </draggable>
-        </div>
-      </DraggableListItem>
+                >
+                  <slot
+                    :group="layerGroup"
+                    :isSelected="currentSelectId.includes(element.id)"
+                    :item="element"
+                    name="item"
+                    :toggleSelect="toggleSelect"
+                  ></slot>
+                </DraggableListItem>
+              </div>
+            </draggable>
+          </div>
+        </DraggableListItem>
+      </div>
       <div
         v-else
         :key="layerGroup.id + '_' + index + '_else'"
@@ -183,11 +196,15 @@ export default {
     }
   },
   mounted() {
-    this.update();
+    this.update(this.items);
   },
   methods: {
-    update() {
-      this.treeLayer = this.convertListToTree(this.items);
+    update(items = []) {
+      if (items == null) {
+        items = this.items;
+      }
+      let treeLayer = this.convertListToTree(items);
+      this.treeLayer = treeLayer;
     },
     convertListToTree(value) {
       let treeLayer = [];
@@ -347,9 +364,11 @@ function createDefaultGroup(group) {
 .draggable-group-container {
   height: 100%;
 }
-.draggable-group__item,
+.draggable-group__item .draggable__item:last-child {
+  padding-bottom: 0px;
+}
 .draggable__item {
-  margin-bottom: 12px;
+  padding-bottom: 12px;
 }
 .draggable-group__info {
   display: flex;

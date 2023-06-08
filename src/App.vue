@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Map @map-loaded="onMapLoad">
+    <Map>
       <BaseMapControl position="bottom-left" />
       <PrintControl />
       <GeolocateControl />
@@ -25,12 +25,9 @@ import {
   BaseMapControl,
   Map,
   PrintControl
-} from "@hungpv4564/vue-library-map";
-import "@hungpv4564/vue-library-map/main.css";
+} from "@hungpv97/vue-library-map";
+import "@hungpv97/vue-library-map/main.css";
 import { LayerControl } from "@/components";
-import { createDefaultView } from "./model/view";
-import { getUUIDv4 } from "./utils";
-import { createDefaultData } from "./model/data";
 export default {
   name: "App",
   components: {
@@ -44,80 +41,7 @@ export default {
     PrintControl,
     LayerControl
   },
-  methods: {
-    onMapLoad() {
-      this.$nextTick(() => {
-        this.$refs.LayerControl.addLayer({
-          id: getUUIDv4(),
-          name: "arcgisonline",
-          group: { name: "test", id: "test" },
-          layer: {
-            type: "raster",
-            source: {
-              type: "raster",
-              tiles: [
-                "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-              ]
-            }
-          },
-          menus: [],
-          metadata: {
-            loading: false
-          }
-        });
-        this.$refs.LayerControl.addLayer({
-          id: getUUIDv4(),
-          name: "openstreetmap",
-          group: { name: "test", id: "test" },
-          layer: {
-            type: "raster",
-            source: {
-              type: "raster",
-              tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"]
-            }
-          },
-          menus: [],
-          metadata: {
-            loading: false
-          }
-        });
-        this.$refs.LayerControl.addLayer({
-          id: getUUIDv4(),
-          name: "naturalearthtiles",
-          layer: {
-            type: "raster",
-            source: {
-              type: "raster",
-              tiles: [
-                "https://naturalearthtiles.roblabs.com/tiles/natural_earth_cross_blended_hypso_shaded_relief.raster/{z}/{x}/{y}.png"
-              ]
-            }
-          },
-          menus: [],
-          metadata: {
-            loading: false
-          }
-        });
-        this.$refs.LayerControl.addLayer({
-          id: getUUIDv4(),
-          name: "Stamen terrain",
-          layer: {
-            type: "raster",
-            source: {
-              type: "raster",
-              tiles: [
-                "https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg"
-              ]
-            }
-          },
-          menus: [],
-          metadata: {
-            loading: false
-          }
-        });
-      });
-    }
-  }
+  methods: {}
 };
 </script>
 <style>

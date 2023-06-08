@@ -1,4 +1,4 @@
-import { fitBounds } from "@hungpv4564/vue-library-map/helper";
+import { fitBounds } from "@hungpv97/vue-library-map/helper";
 import { getUUIDv4 } from "@/utils";
 export class ALayer {
   constructor(info) {

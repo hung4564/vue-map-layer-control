@@ -7,11 +7,11 @@
         @click="toggleShow()"
         :active="show"
       >
-        <SvgIcon :size="18" type="mdi" :path="path.icon" />
+        <SvgIcon size="14" type="mdi" :path="path.icon" />
       </MapControlButton>
     </template>
     <template #draggable="props">
-      <DraggableSidebar v-bind="props" :show.sync="show" v-if="show">
+      <DraggableSidebar v-bind="props" :show.sync="show">
         <template #title>
           <span class="layer-control__title">Layer control</span>
         </template>
@@ -20,16 +20,15 @@
             <div class="layer-control__header">
               <div class="v-spacer"></div>
               <div class="layer-item__button" @click="addNewGroup">
-                <SvgIcon :size="18" type="mdi" :path="path.group.create" />
+                <SvgIcon size="14" type="mdi" :path="path.group.create" />
               </div>
               <div class="layer-item__button" @click="onRemoveAllLayer">
-                <SvgIcon :size="18" type="mdi" :path="path.deleteAll" />
+                <SvgIcon size="14" type="mdi" :path="path.deleteAll" />
               </div>
             </div>
             <div class="layer-control__list">
               <draggable-group-list
                 ref="layerGroup"
-                class="overflow-auto pa-4"
                 :items.sync="layers"
                 :groupShow.sync="groupShow"
                 :selected.sync="itemsLayerSelectId"
@@ -46,7 +45,8 @@
                     :isSelected="isSelected"
                     :toggleSelect="toggleSelect"
                   >
-                    <LayerItem
+                    <component
+                      :is="item.component"
                       :item="item"
                       :isSelected="isSelected"
                       @update:item="onUpdateLayer"
@@ -62,10 +62,10 @@
                           :disabled="loading"
                           @click.prevent.stop="handleContextClick($event, item)"
                         >
-                          <SvgIcon :size="16" type="mdi" :path="path.menu" />
+                          <SvgIcon size="14" type="mdi" :path="path.menu" />
                         </div>
                       </template>
-                    </LayerItem>
+                    </component>
                   </slot>
                 </template>
               </draggable-group-list>
@@ -85,27 +85,29 @@
 
 <script>
 import LayerItemContextMenu from "./layer-item-context-menu.vue";
-import LayerItem from "./layer-item.vue";
+import LayerItem from "./item/layer-item.vue";
+import LayerItemCompare from "./item/layer-item-compare.vue";
 import DraggableGroupList from "@/components/DraggableList/draggable-group-list";
-import { DraggableSidebar } from "@hungpv4564/vue-library-draggable";
+import { DraggableSidebar } from "@hungpv97/vue-library-draggable";
 import { mdiDelete, mdiDotsVertical, mdiGroup, mdiLayers } from "@mdi/js";
+
+import { ModuleMixin, MapControlButton } from "@hungpv97/vue-library-map/mixin";
+import { eventBus, EVENTBUS_TYPE } from "@hungpv97/vue-library-map/event-bus";
+import { storeDatasource } from "@hungpv97/vue-library-map/store";
+console.log("🚀 ~ storeDatasource", storeDatasource);
+const { createLayer, getLayerData, removeLayer, setLayersView, layersView } =
+  storeDatasource;
 import {
-  ModuleMixin,
-  MapControlButton
-} from "@hungpv4564/vue-library-map/mixin";
-import {
-  createLayer,
-  getLayerData,
-  removeLayer,
-  updateLayerSimple,
-  toggleShow
-} from "@/model";
+  toggleShow,
+  updateLayerSimple
+} from "@hungpv97/vue-library-map/helper";
 export default {
   components: {
     MapControlButton,
     DraggableSidebar,
     DraggableGroupList,
     LayerItem,
+    LayerItemCompare,
     LayerItemContextMenu
   },
   mixins: [ModuleMixin],
@@ -116,9 +118,9 @@ export default {
       layer: null
     },
     show: true,
-    layers: [],
     itemsLayerSelectId: [],
-    groupShow: {}
+    groupShow: {},
+    layers: []
   }),
   computed: {
     path() {
@@ -131,7 +133,45 @@ export default {
     }
   },
   watch: {},
+  beforeDestroy() {},
   methods: {
+    onInit() {
+      let vm = this;
+      vm.layers = layersView(vm.c_mapId);
+      vm.addLayerToList = () => {
+        if (!vm.c_mapId) return;
+        vm.updateLayersFromStore();
+      };
+      eventBus.on(EVENTBUS_TYPE.MAP.SET_LAYER, vm.addLayerToList);
+      eventBus.on(EVENTBUS_TYPE.MAP.UPDATE_LAYERS, (map_id) => {
+        if (map_id === vm.c_mapId) {
+          vm.updateLayersFromStore();
+        }
+      });
+      vm.removeLayerFromList = (layer_view) => {
+        if (!layer_view) return;
+        vm.updateLayersFromStore();
+      };
+      eventBus.on(EVENTBUS_TYPE.MAP.REMOVE_LAYER, vm.removeLayerFromList);
+    },
+    updateLayersFromStore() {
+      this.layers = layersView(this.c_mapId);
+      this.updateTree();
+    },
+    onDestroy() {
+      this.onRemoveAllLayer();
+      if (this.addLayerToList) {
+        eventBus.off(EVENTBUS_TYPE.MAP.SET_LAYER, this.addLayerToList);
+      }
+      if (this.removeLayerFromList) {
+        eventBus.off(EVENTBUS_TYPE.MAP.REMOVE_LAYER, this.removeLayerFromList);
+      }
+    },
+    updateTree() {
+      this.$nextTick(() => {
+        if (this.$refs.layerGroup) this.$refs.layerGroup.update(this.layers);
+      });
+    },
     handleContextClick(event, item) {
       this.menu_context.items = item.menus || [];
       this.menu_context.layer = item;
@@ -147,25 +187,32 @@ export default {
     },
     updateLayers() {
       let beforeId;
-      this.layers.forEach((layer) => {
-        let temp = getLayerData(layer);
-        temp.moveLayer(this.map, beforeId);
-        beforeId = temp.getBeforeId();
-      });
+      this.layers
+        .slice()
+        .reverse()
+        .forEach((layer) => {
+          getLayerData(layer, (map, temp) => {
+            temp.moveLayer(map, beforeId);
+            beforeId = temp.getBeforeId();
+          });
+        });
+      setLayersView(this.c_mapId, this.layers);
     },
     addLayer(info) {
-      this.layers.unshift(createLayer(this.map, info));
-      if (this.$refs.layerGroup) this.$refs.layerGroup.update();
+      createLayer(this.c_mapId, info);
+      this.updateTree();
     },
     onUpdateLayer(layer) {
-      updateLayerSimple(this.map, layer);
+      updateLayerSimple(layer);
     },
     onToBounds(layer) {
-      let temp = getLayerData(layer);
-      if (!temp) return;
-      let bounds =
-        layer.metadata && layer.metadata.bounds ? layer.metadata.bounds : null;
-      temp.flyTo(this.map, bounds);
+      getLayerData(layer, (map, temp) => {
+        let bounds =
+          layer.metadata && layer.metadata.bounds
+            ? layer.metadata.bounds
+            : null;
+        temp.flyTo(map, bounds);
+      });
     },
     onRemoveLayer(layer) {
       this.removeLayer(layer);
@@ -183,19 +230,22 @@ export default {
       ) {
         this.closeContextMenu();
       }
-      removeLayer(this.map, layer);
-    },
-    onDestroy() {
-      this.onRemoveAllLayer();
+      removeLayer(this.c_mapId, layer);
     },
     onRemoveAllLayer() {
-      this.layers.forEach((layer) => {
-        if (!layer.disable_delete) removeLayer(this.map, layer);
-      });
+      if (this.layers) {
+        this.layers.forEach((layer) => {
+          if (!layer.disable_delete) removeLayer(this.c_mapId, layer);
+        });
+      }
       this.layers = [];
     },
     onLayerAction({ menu, item }) {
-      if (menu && menu.click) menu.click(item, this.map, menu);
+      if (menu && menu.click) {
+        this.callMap((map) => {
+          menu.click(item, map, menu);
+        });
+      }
     },
     addNewGroup() {
       this.$refs.layerGroup.addNewGroup("");
@@ -205,7 +255,7 @@ export default {
       let children = group.children || [];
       children.forEach((child) => {
         child.show = show;
-        toggleShow(this.map, child, show);
+        toggleShow(child, show);
       });
     }
   }
@@ -226,7 +276,7 @@ export default {
 .layer-control__list {
   flex-grow: 1;
   overflow: auto;
-  padding: 2px 8px 8px;
+  padding: 4px 12px 8px;
 }
 .layer-control {
   height: 100%;

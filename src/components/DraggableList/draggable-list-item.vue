@@ -8,7 +8,7 @@
       }"
     >
       <div class="draggable-handle__icon">
-        <SvgIcon :size="18" type="mdi" :path="path.draggable" />
+        <SvgIcon size="14" type="mdi" :path="path.draggable" />
       </div>
     </div>
     <div class="draggale-item__info">
@@ -60,7 +60,7 @@ export default {
     flex-grow: 1;
     padding: 8px;
     overflow: hidden;
-    min-height: 65px;
+    min-height: 50px;
   }
 }
 .draggale-item-active {

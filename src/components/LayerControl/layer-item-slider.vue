@@ -16,15 +16,15 @@ export default {
   props: {
     value: {},
     min: {
-      default: 0,
+      default: 0
     },
     max: {
-      default: 100,
+      default: 100
     },
     step: {
-      default: 1,
+      default: 1
     },
-    disabled: Boolean,
+    disabled: Boolean
   },
   computed: {
     backgroundSize() {
@@ -36,18 +36,17 @@ export default {
       },
       set(value) {
         this.$emit("input", value);
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>
 
 <style scoped>
 input[type="range"] {
-  -webkit-appearance: none;
   display: block;
   width: 100%;
-  margin: 16px 0;
+  margin: 8px 0;
   background: #3e3e3f;
   background-image: -webkit-gradient(
     linear,
@@ -82,7 +81,6 @@ input[type="range"]::-webkit-slider-thumb {
   border-radius: 50%;
   background: #3e3e3f;
   cursor: pointer;
-  -webkit-appearance: none;
   margin-top: -6px;
 }
 input[type="range"]:focus::-webkit-slider-runnable-track {

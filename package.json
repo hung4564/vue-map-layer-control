@@ -1,5 +1,5 @@
 {
-  "name": "@hungpv4564/vue-map-layer-control",
+  "name": "@hungpv97/vue-map-layer-control",
   "private": false,
   "exports": {
     ".": "./dist/map.common.js",
@@ -25,10 +25,11 @@
   },
   "bugs": "https://github.com/hung4564/vue-map-layer-control/issues",
   "dependencies": {
-    "@hungpv4564/vue-library-map": "^1.0.20",
+    "@hungpv97/vue-library-map": "^0.0.1",
     "core-js": "^3.8.3",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",
+    "mapbox-gl-compare": "^0.4.1",
     "v-click-outside": "^3.2.0",
     "vue": "^2.6.14",
     "vuedraggable": "^2.24.3"

@@ -7,7 +7,7 @@
       class="layer-context-menu__item"
       :class="[
         option.class,
-        option.type === 'divider' ? 'layer-context-menu__divider' : '',
+        option.type === 'divider' ? 'layer-context-menu__divider' : ''
       ]"
     >
       <span v-html="option.name"></span>
@@ -21,19 +21,19 @@ import vClickOutside from "v-click-outside";
 export default {
   name: "VueSimpleContextMenu",
   directives: {
-    clickOutside: vClickOutside.directive,
+    clickOutside: vClickOutside.directive
   },
   props: {
     options: {
       type: Array,
-      required: true,
-    },
+      required: true
+    }
   },
   data() {
     return {
       item: null,
       menuWidth: null,
-      menuHeight: null,
+      menuHeight: null
     };
   },
   methods: {
@@ -87,21 +87,21 @@ export default {
       this.hideContextMenu();
       this.$emit("click:option", {
         item: this.item,
-        menu: option,
+        menu: option
       });
     },
     onEscKeyRelease(event) {
       if (event.keyCode === 27) {
         this.hideContextMenu();
       }
-    },
+    }
   },
   mounted() {
     document.body.addEventListener("keyup", this.onEscKeyRelease);
   },
   beforeDestroy() {
     document.removeEventListener("keyup", this.onEscKeyRelease);
-  },
+  }
 };
 </script>
 
