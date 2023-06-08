@@ -94,7 +94,6 @@ import { mdiDelete, mdiDotsVertical, mdiGroup, mdiLayers } from "@mdi/js";
 import { ModuleMixin, MapControlButton } from "@hungpv97/vue-library-map/mixin";
 import { eventBus, EVENTBUS_TYPE } from "@hungpv97/vue-library-map/event-bus";
 import { storeDatasource } from "@hungpv97/vue-library-map/store";
-console.log("🚀 ~ storeDatasource", storeDatasource);
 const { createLayer, getLayerData, removeLayer, setLayersView, layersView } =
   storeDatasource;
 import {
