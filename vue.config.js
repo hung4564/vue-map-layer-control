@@ -1,10 +1,26 @@
 const path = require("path");
 function getProdExternals() {
   return {
+    vuedraggable: "vuedraggable",
+    "v-click-outside": "v-click-outside",
     "@hungpv97/vue-library-map": "@hungpv97/vue-library-map",
+    "@hungpv97/vue-library-map/mixin": "@hungpv97/vue-library-map/mixin",
+    "@hungpv97/vue-library-map/store": "@hungpv97/vue-library-map/store",
+    "@hungpv97/vue-library-map/helper": "@hungpv97/vue-library-map/helper",
+    "@hungpv97/vue-library-map/event-bus":
+      "@hungpv97/vue-library-map/event-bus",
+    "@hungpv97/vue-library-draggable": "@hungpv97/vue-library-draggable",
+    "@jamescoyle/vue-icon": "@jamescoyle/vue-icon",
+    "@turf/bbox": "@turf/bbox",
+    axios: "axios",
+    "mapbox-gl": "mapbox-gl",
+    "@mdi/js": "@mdi/js",
     vue: "vue",
     lodash: "lodash",
-    vuedraggable: "vuedraggable"
+    "lodash.get": "lodash.get",
+    "lodash.set": "lodash.set",
+    papaparse: "papaparse",
+    mitt: "mitt"
   };
 }
 module.exports = {
