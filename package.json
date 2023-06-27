@@ -27,7 +27,7 @@
   },
   "bugs": "https://github.com/hung4564/vue-map-layer-control/issues",
   "dependencies": {
-    "@hungpv97/vue-library-map": "^0.0.3",
+    "@hungpv97/vue-library-map": "^0.0.5",
     "core-js": "^3.8.3",
     "lodash.get": "^4.4.2",
     "lodash.set": "^4.3.2",

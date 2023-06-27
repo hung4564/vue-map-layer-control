@@ -1035,12 +1035,13 @@
     vue-material-design-icons "^5.2.0"
     vue-resize-directive "^1.2.0"
 
-"@hungpv97/vue-library-map@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@hungpv97/vue-library-map/-/vue-library-map-0.0.3.tgz#2e185cc367a40583ed0131bf4b960f6cd79fb9c4"
-  integrity sha512-4EjmN14Fqn2Y6XXsLy1fxwTLldIAAiAWf5j6uOGTSIJpH/5Km7iRVTQ+T5RCrBApQ6uflTqDCgTPqnY8EqSiWA==
+"@hungpv97/vue-library-map@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@hungpv97/vue-library-map/-/vue-library-map-0.0.5.tgz#410b1d0f9b935c38416976317c9c5f49751ca68c"
+  integrity sha512-mkWdRzPIPPD7FT67GfsJOxyLa7AQvtV/iZoCIJAfM/D5QfFsdrLllKbeYm3r8XdvxWSXPZRxhwrCRI6S3/mqmQ==
   dependencies:
     "@hungpv97/vue-library-draggable" "^1.0.0"
+    "@hungpv97/vue-map-store" "^0.0.1"
     "@jamescoyle/vue-icon" "^0.1.2"
     "@linusborg/vue-simple-portal" "^0.1.5"
     "@mapbox/mapbox-gl-sync-move" "^0.3.1"
@@ -1049,21 +1050,24 @@
     core-js "3.29.0"
     file-saver "2.0.5"
     geojson-validation "^1.0.2"
-    lodash "^4.17.21"
-    lodash.get "^4.4.2"
-    lodash.set "^4.3.2"
+    lodash.merge "^4.6.2"
     mapbox-gl "1.13.0"
-    minify-css-string "^1.0.0"
     mitt "^3.0.0"
     papaparse "^5.4.1"
-    proj4 "2.9.0"
     sass "1.59.2"
     sass-loader "13.2.0"
     v-click-outside "^3.2.0"
     vue "2.7.14"
-    vue-drag-resize "1.5.4"
-    vue-resize-directive "1.2.0"
-    vuedraggable "^2.24.3"
+
+"@hungpv97/vue-map-store@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@hungpv97/vue-map-store/-/vue-map-store-0.0.1.tgz#7a5e3163a3e07ad7d7f071413ec62a50b2fe50c5"
+  integrity sha512-xbm54vdo1GVkPm6EajG2lL5fp3n/aSPeV3Ez/fDwIN5MJ4LkfumJ183+ivFpcpoRQ1UJ0t5Mtp5v/seV325R3w==
+  dependencies:
+    core-js "^3.8.3"
+    lodash.merge "^4.6.2"
+    mitt "^3.0.0"
+    vue "^2.6.14"
 
 "@jamescoyle/vue-icon@^0.1.2":
   version "0.1.2"
@@ -4343,11 +4347,6 @@ methods@~1.1.2:
   resolved "https://registry.yarnpkg.com/methods/-/methods-1.1.2.tgz#5529a4d67654134edcc5266656835b0f851afcee"
   integrity sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==
 
-mgrs@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/mgrs/-/mgrs-1.0.0.tgz#fb91588e78c90025672395cb40b25f7cd6ad1829"
-  integrity sha512-awNbTOqCxK1DBGjalK3xqWIstBZgN6fxsMSiXLs9/spqWkF2pAhb2rrYCFSsr1/tT7PhcDGjZndG8SWYn0byYA==
-
 micromatch@^4.0.2, micromatch@^4.0.4, micromatch@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/micromatch/-/micromatch-4.0.5.tgz#bc8999a7cbbf77cdc89f132f6e467051b49090c6"
@@ -5185,14 +5184,6 @@ progress@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
-
-proj4@2.9.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/proj4/-/proj4-2.9.0.tgz#1b61db8c998313f80e2514609b339fb2d28cbb82"
-  integrity sha512-BoDXEzCVnRJVZoOKA0QHTFtYoE8lUxtX1jST38DJ8U+v1ixY70Kpwi0Llu6YqSWEH2xqu4XMEBNGcgeRIEywoA==
-  dependencies:
-    mgrs "1.0.0"
-    wkt-parser "^1.3.1"
 
 protocol-buffers-schema@^3.3.1:
   version "3.6.0"
@@ -6176,7 +6167,7 @@ vt-pbf@^3.1.1:
     "@mapbox/vector-tile" "^1.3.1"
     pbf "^3.2.1"
 
-vue-drag-resize@1.5.4, vue-drag-resize@^1.5.0-rc3, vue-drag-resize@^1.5.4:
+vue-drag-resize@^1.5.0-rc3, vue-drag-resize@^1.5.4:
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/vue-drag-resize/-/vue-drag-resize-1.5.4.tgz#f583f40f356e5792aa89109b3d13ba4407c25198"
   integrity sha512-SR3U7n6TAZEBgP7zw7bR9mjtAlYBjqIoaWTDPz5HXN/nYhOxKSA31aD7p71fmq1jtyt9reAnCx62valNL9ZAcg==
@@ -6215,7 +6206,7 @@ vue-material-design-icons@^5.2.0:
   resolved "https://registry.yarnpkg.com/vue-material-design-icons/-/vue-material-design-icons-5.2.0.tgz#4e0cf50a68cb6900e8bd2550acbb44fad99bbd8e"
   integrity sha512-fcdcJHQ9fQw2CAytuLAzWSELcxH138sCdMItVhvmO7Lu9afIgojB/UCWv7XHt/lURsnq/n6O+muM4AQgw8yfig==
 
-vue-resize-directive@1.2.0, vue-resize-directive@^1.2.0:
+vue-resize-directive@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/vue-resize-directive/-/vue-resize-directive-1.2.0.tgz#4214ca8a80a425529b036ea868cad54a38f613e4"
   integrity sha512-LmpFexQcl1XYyz3DQrTrq3Efgj50MKEON60nR9MMAq1D2ZtXFg1WDcy1wy1T0SeduNtIu9hos2aLTsJUplvjlQ==
@@ -6451,11 +6442,6 @@ wildcard@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/wildcard/-/wildcard-2.0.1.tgz#5ab10d02487198954836b6349f74fff961e10f67"
   integrity sha512-CC1bOL87PIWSBhDcTrdeLo6eGT7mCFtrg0uIJtqJUFyK+eJnzl8A1niH56uu7KMa5XFrtiV+AQuHO3n7DsHnLQ==
-
-wkt-parser@^1.3.1:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/wkt-parser/-/wkt-parser-1.3.3.tgz#46b4e3032dd9c86907f7e630b57e3c6ea2bb772b"
-  integrity sha512-ZnV3yH8/k58ZPACOXeiHaMuXIiaTk1t0hSUVisbO0t4RjA5wPpUytcxeyiN2h+LZRrmuHIh/1UlrR9e7DHDvTw==
 
 word-wrap@^1.2.3:
   version "1.2.3"

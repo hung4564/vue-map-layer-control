@@ -1,15 +1,14 @@
 <template>
   <div id="app">
     <Map>
-      <BaseMapControl position="bottom-left" />
-      <PrintControl />
+      <LayerControl position="top-left" />
       <GeolocateControl />
       <HomeControl />
       <ZoomControl />
 
       <FullScreenControl />
+      <BaseMapControl position="bottom-left" />
       <MouseCoordinatesControl />
-      <LayerControl position="top-left" ref="LayerControl" />
     </Map>
   </div>
 </template>
@@ -23,11 +22,10 @@ import {
   HomeControl,
   GeolocateControl,
   BaseMapControl,
-  Map,
-  PrintControl
+  Map
 } from "@hungpv97/vue-library-map";
 import "@hungpv97/vue-library-map/main.css";
-import { LayerControl } from "@/components";
+import { LayerControl } from "@components/Map";
 export default {
   name: "App",
   components: {
@@ -38,7 +36,6 @@ export default {
     GeolocateControl,
     BaseMapControl,
     Map,
-    PrintControl,
     LayerControl
   },
   methods: {}
