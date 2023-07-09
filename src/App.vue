@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Map>
+    <Map @map-loaded="onMapLoaded">
       <LayerControl position="top-left" />
       <GeolocateControl />
       <HomeControl />
@@ -9,6 +9,7 @@
       <FullScreenControl />
       <BaseMapControl position="bottom-left" />
       <MouseCoordinatesControl />
+      <IdentifyControl position="top-right" />
     </Map>
   </div>
 </template>
@@ -25,7 +26,16 @@ import {
   Map
 } from "@hungpv97/vue-library-map";
 import "@hungpv97/vue-library-map/main.css";
-import { LayerControl } from "@components/Map";
+import { LayerControl, IdentifyControl } from "@map";
+import { createLayer } from "@map/store/store-datasource";
+import {
+  LayerListBuild,
+  LayerSourceBuild,
+  LayerMapBuild,
+  LayerIdentifyBuild
+} from "@map/model";
+import { GeoJsonSourceBuild, RasterSourceBuild } from "@map/model/view/source";
+import { mdiHome } from "@mdi/js";
 export default {
   name: "App",
   components: {
@@ -36,9 +46,137 @@ export default {
     GeolocateControl,
     BaseMapControl,
     Map,
-    LayerControl
+    LayerControl,
+    IdentifyControl
   },
-  methods: {}
+  methods: {
+    async onMapLoaded(map) {
+      createLayer(
+        {
+          name: "Stamen watercolor"
+        },
+        map.id,
+        (layer) => {
+          let builds = [
+            new LayerListBuild().disableOpacity().forMap(map.id),
+            new LayerSourceBuild(new RasterSourceBuild()).setTiles([
+              "https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg"
+            ]),
+            new LayerMapBuild().setLayer({
+              type: "raster"
+            })
+          ];
+
+          return builds;
+        }
+      );
+      createLayer(
+        {
+          name: "test 2"
+        },
+        map.id,
+        (layer) => {
+          let color = "#34495e";
+          let builds = [
+            new LayerListBuild().setColor(color).forMap(map.id),
+            new LayerSourceBuild(new GeoJsonSourceBuild()).setData({
+              type: "FeatureCollection",
+              features: [
+                {
+                  type: "Feature",
+                  properties: {},
+                  geometry: {
+                    coordinates: [
+                      [
+                        [104.96327341667353, 19.549518287564368],
+                        [104.96327341667353, 18.461221184685627],
+                        [106.65936430823979, 18.461221184685627],
+                        [106.65936430823979, 19.549518287564368],
+                        [104.96327341667353, 19.549518287564368]
+                      ]
+                    ],
+                    type: "Polygon"
+                  }
+                }
+              ]
+            }),
+            new LayerMapBuild().setLayers([
+              {
+                type: "fill", // For fill
+                paint: {
+                  "fill-color": color,
+                  "fill-opacity": 1
+                }
+              },
+              {
+                type: "line", // For outline
+                paint: {
+                  "line-color": color,
+                  "line-width": 2
+                }
+              }
+            ]),
+            new LayerIdentifyBuild()
+          ];
+
+          return builds;
+        }
+      );
+      createLayer(
+        {
+          name: "test 3"
+        },
+        map.id,
+        (layer) => {
+          let color = "#F85E00";
+          let builds = [
+            new LayerListBuild()
+              .setColor(color)
+              .disableOpacity()
+              .forMap(map.id),
+            new LayerSourceBuild(new GeoJsonSourceBuild()).setData({
+              type: "FeatureCollection",
+              features: [
+                {
+                  type: "Feature",
+                  properties: {},
+                  geometry: {
+                    coordinates: [
+                      [
+                        [105.24219817631774, 20.22109590156704],
+                        [105.24219817631774, 18.332345570422945],
+                        [105.9212676811336, 18.332345570422945],
+                        [105.9212676811336, 20.22109590156704],
+                        [105.24219817631774, 20.22109590156704]
+                      ]
+                    ],
+                    type: "Polygon"
+                  }
+                }
+              ]
+            }),
+            new LayerMapBuild().setLayers([
+              {
+                type: "fill", // For fill
+                paint: {
+                  "fill-color": color,
+                  "fill-opacity": 1
+                }
+              },
+              {
+                type: "line", // For outline
+                paint: {
+                  "line-color": color,
+                  "line-width": 2
+                }
+              }
+            ])
+          ];
+          return builds;
+        }
+      );
+    }
+  }
 };
 </script>
 <style>

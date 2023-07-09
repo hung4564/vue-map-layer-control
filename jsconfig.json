@@ -7,6 +7,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
+      "@map/*": ["src/components/Map/*"],
       "@constant/*": ["src/constant/*"],
       "@utils/*": ["src/utils/*"],
       "@app.config": ["src/app.config.json"]

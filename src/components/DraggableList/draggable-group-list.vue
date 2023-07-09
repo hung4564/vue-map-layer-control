@@ -30,20 +30,6 @@
               <template
                 v-if="layerGroup.children && layerGroup.children.length > 0"
               >
-                <span @click="toggleShow(layerGroup, index)">
-                  <SvgIcon
-                    size="14"
-                    type="mdi"
-                    :path="path.group.show"
-                    v-if="layerGroup.show"
-                  />
-                  <SvgIcon
-                    size="14"
-                    type="mdi"
-                    :path="path.group.hide"
-                    v-else
-                  />
-                </span>
                 <span @click="unGroup(layerGroup, index)">
                   <SvgIcon size="14" type="mdi" :path="path.group.unGroup" />
                 </span>
@@ -200,7 +186,7 @@ export default {
   },
   methods: {
     update(items = []) {
-      if (items == null) {
+      if (items == null || items.length === 0) {
         items = this.items;
       }
       let treeLayer = this.convertListToTree(items);
@@ -327,10 +313,6 @@ export default {
     deleteGroup(group, groupIndex) {
       this.treeLayer.splice(groupIndex, 1);
       this.$emit("click-group:remove", group);
-    },
-    toggleShow(group) {
-      group.show = !group.show;
-      this.$emit("click-group:toggle-show", group);
     }
   }
 };

@@ -60,7 +60,7 @@ export default {
     flex-grow: 1;
     padding: 8px;
     overflow: hidden;
-    min-height: 50px;
+    min-height: 30px;
   }
 }
 .draggale-item-active {
