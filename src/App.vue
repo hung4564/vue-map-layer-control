@@ -84,7 +84,10 @@ export default {
               features: [
                 {
                   type: "Feature",
-                  properties: {},
+                  properties: {
+                    id: "1",
+                    name: "feature 2"
+                  },
                   geometry: {
                     coordinates: [
                       [
@@ -139,7 +142,10 @@ export default {
               features: [
                 {
                   type: "Feature",
-                  properties: {},
+                  properties: {
+                    id: "1",
+                    name: "feature 1"
+                  },
                   geometry: {
                     coordinates: [
                       [
@@ -170,7 +176,8 @@ export default {
                   "line-width": 2
                 }
               }
-            ])
+            ]),
+            new LayerIdentifyBuild()
           ];
           return builds;
         }

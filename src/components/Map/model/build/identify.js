@@ -25,10 +25,10 @@ export function createDefaultViewInList(layer, option = {}) {
       return parent;
     },
     get id() {
-      return layer.id;
+      return parent.id;
     },
     get name() {
-      return layer.name;
+      return parent.name;
     },
     config: {
       field_name: "name",

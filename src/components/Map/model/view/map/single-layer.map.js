@@ -14,6 +14,9 @@ export class MapSingleLayer extends ALayer {
   getBeforeId() {
     return this.layer.id;
   }
+  getAllLayerIds() {
+    return [this.layer.id];
+  }
   addToMap(map, beforeId) {
     let view_source = this.parent.getView("source");
     let source_id = view_source ? view_source.id : null;
