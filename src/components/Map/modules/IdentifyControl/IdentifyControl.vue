@@ -21,6 +21,14 @@
         @close="close"
         :title="$map.trans('map.identify.title')"
       >
+        <template #extra-btn>
+          <baseButton
+            @click="!isSelectBbox ? onStartBox() : onRemoveBox()"
+            :active="isSelectBbox"
+          >
+            <SvgIcon size="14" type="mdi" :path="path.boxSelect" />
+          </baseButton>
+        </template>
         <div class="identify-control-container">
           <div class="identify-control-header">
             <b>{{ $map.trans("map.identify.point") }}:</b>
@@ -64,14 +72,17 @@ import {
   MapControlButton
 } from "@hungpv97/vue-library-map";
 import SvgIcon from "@jamescoyle/vue-icon";
-import { mdiHandPointingUp } from "@mdi/js";
+import { mdiHandPointingUp, mdiSelect } from "@mdi/js";
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from "vue";
 import { getAllViewForKey } from "@map/store/store-datasource";
 import { getLayerFromView } from "@map/helper";
+import baseButton from "@/components/base/base-button.vue";
 import enLang from "@/lang/en/identify.json";
+import { startBoxRangerMap } from "./map-ranger";
 const VIEW_KEY_TYPE = "identify";
 const path = {
-  icon: mdiHandPointingUp
+  icon: mdiHandPointingUp,
+  boxSelect: mdiSelect
 };
 const { c_mapId, callMap, $map } = useMap();
 storeLang.updateMapLang(c_mapId.value, {
@@ -95,6 +106,7 @@ function onAddIdenity() {
 }
 function onRemoveIdenity() {
   onRemoveClick();
+  onRemoveBox();
 }
 function onAddClick() {
   callMap((map) => {
@@ -117,6 +129,38 @@ function onMapClick(e) {
     });
     onSelectFeatures(features);
   });
+}
+let map_ranger = null;
+const isSelectBbox = ref(false);
+function onStartBox() {
+  isSelectBbox.value = true;
+  callMap((map) => {
+    map.dragPan.disable();
+    map.boxZoom.disable();
+    map_ranger = startBoxRangerMap(map.getCanvasContainer(), (bbox) => {
+      map.dragPan.enable();
+      map.boxZoom.enable();
+      onRemoveBox();
+      if (!bbox) return;
+      onMapBbox(bbox);
+    });
+  });
+}
+function onMapBbox(bbox) {
+  if (!bbox) return;
+  callMap((map) => {
+    const features = map.queryRenderedFeatures(bbox, {
+      layers: allLayerIds.value
+    });
+    onSelectFeatures(features);
+  });
+}
+function onRemoveBox() {
+  isSelectBbox.value = false;
+  if (map_ranger) {
+    map_ranger.destroy();
+    map_ranger = null;
+  }
 }
 const result = reactive({ items: [], loading: false });
 function onSelectFeatures(features) {
@@ -199,12 +243,19 @@ function close() {
 }
 </style>
 <style scoped lang="scss">
+.identify-control__button {
+  display: inline-flex;
+  min-width: 20px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
 .identify-control {
   &-container {
     display: flex;
     flex-direction: column;
     b {
-      color: var(--v-primary-base, #004e98);
+      color: var(--v-primary-base, #38d4ff);
       padding-right: 4px;
       font-weight: bolder;
     }
@@ -244,7 +295,7 @@ function close() {
     border-width: thin;
     margin-bottom: 4px;
     &__header {
-      color: var(--v-primary-base, #004e98);
+      color: var(--v-primary-base, #38d4ff);
       font-weight: bolder;
       white-space: nowrap !important;
       overflow: hidden !important;

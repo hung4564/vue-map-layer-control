@@ -31,7 +31,7 @@ export function createDefaultViewInList(layer, option = {}) {
     set metadata(value) {
       layer.metadata = value;
     },
-    color: option.color || "#004e98",
+    color: option.color || "#38d4ff",
     config: {
       disable_delete: false,
       disabled_opacity: false,

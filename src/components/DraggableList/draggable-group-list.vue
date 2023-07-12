@@ -338,7 +338,7 @@ function createDefaultGroup(group) {
 }
 :deep(.ghost) {
   opacity: 0.2;
-  background: #004e98;
+  background: var(--v-primary-base, #38d4ff);
 }
 .draggable-handle {
   cursor: all-scroll;

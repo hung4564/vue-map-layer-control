@@ -1,7 +1,4 @@
-import maplibregl from "mapbox-gl";
-export function startBoxRangerMap(map, cb_bbox) {
-  const canvas = map.getCanvasContainer();
-  map.boxZoom.disable();
+export function startBoxRangerMap(canvas, cb_bbox) {
   let can_draw = true;
   // Variable to hold the starting xy coordinates
   // when `mousedown` occured.
@@ -22,18 +19,16 @@ export function startBoxRangerMap(map, cb_bbox) {
   // Return the xy coordinates of the mouse position
   function mousePos(e) {
     const rect = canvas.getBoundingClientRect();
-    return new maplibregl.Point(
-      e.clientX - rect.left - canvas.clientLeft,
-      e.clientY - rect.top - canvas.clientTop
-    );
+    return {
+      x: e.clientX - rect.left - canvas.clientLeft,
+      y: e.clientY - rect.top - canvas.clientTop
+    };
   }
 
   function mouseDown(e) {
-    // Continue the rest of the function if the shiftkey is pressed.
-    if (!(e.shiftKey && e.button === 0)) return;
-
+    // // Continue the rest of the function if the shiftkey is pressed.
+    // if (!(e.shiftKey && e.button === 0)) return;
     // Disable default drag zooming when the shift key is held down.
-    map.dragPan.disable();
 
     // Call functions for the following events
     document.addEventListener("mousemove", onMouseMove);
@@ -97,7 +92,6 @@ export function startBoxRangerMap(map, cb_bbox) {
     canvas.removeEventListener("mousedown", mouseDown);
     can_draw = false;
     cb_bbox = null;
-    map.boxZoom.enable();
     finish();
   }
   return {
